@@ -1,5 +1,9 @@
 # Tacotron 2 (without wavenet)
 
+####
+In this version of tacotron2 you can use train_new_language.py to train your own language, dont forget to upgrade your own alphabet
+####
+
 PyTorch implementation of [Natural TTS Synthesis By Conditioning
 Wavenet On Mel Spectrogram Predictions](https://arxiv.org/pdf/1712.05884.pdf). 
 
