@@ -15,31 +15,62 @@ hyperparameter. Some cleaners are English-specific. You'll typically want to use
 import re
 from unidecode import unidecode
 from .numbers import normalize_numbers
+from .numbers import normalize_numbers_tr
 
 
 # Regular expression matching whitespace:
 _whitespace_re = re.compile(r'\s+')
 
+def turkish_letter_changer(text):
+  text = text.replace("ı", "w")
+  text = text.replace("I", "w")
+  text = text.replace("ü", "q")
+  text = text.replace("Ü", "q")
+  text = text.replace("ş", "x")
+  text = text.replace("Ş", "x")
+  text = text.replace("ç", "j")
+  text = text.replace("Ç", "j")
+  return text
+
 # List of (regular expression, replacement) pairs for abbreviations:
 _abbreviations = [(re.compile('\\b%s\\.' % x[0], re.IGNORECASE), x[1]) for x in [
-  ('mrs', 'misess'),
-  ('mr', 'mister'),
-  ('dr', 'doctor'),
-  ('st', 'saint'),
-  ('co', 'company'),
-  ('jr', 'junior'),
-  ('maj', 'major'),
-  ('gen', 'general'),
-  ('drs', 'doctors'),
-  ('rev', 'reverend'),
-  ('lt', 'lieutenant'),
-  ('hon', 'honorable'),
-  ('sgt', 'sergeant'),
-  ('capt', 'captain'),
-  ('esq', 'esquire'),
-  ('ltd', 'limited'),
-  ('col', 'colonel'),
-  ('ft', 'fort'),
+  ('vb', 'vebenzeri'),
+  ('vs', 'vesaire'),
+  ('dr', 'doktor'),
+  ('av', 'avukat'),
+  ('MÖ', 'milattan önce'),# okunmuyo
+  ('MS', 'milattan sonra'),
+  ('TBMM', 'Türkiye Büyük Millet Meclisi'),
+  ('TDK', 'Türk Dil Kurumu'),
+  ('TC', 'Türkiye Cumhuriyeti'),
+  ('mm', 'milimetre'),
+  ('kg', 'kilogram'),
+  ('km', 'kilometre'),
+  ('mg', 'miligram'),
+  ('Prof', 'Profesör'),
+  ('haz', 'hazırlayan'),
+  ('çev', 'çeviren'),# okunmuyo
+  ('Alb', 'Albay'),
+  ('Müh', 'Mühendis'),# okunmuyo
+  ('no', 'Numara'),
+  ('Opr', 'Operatör'),
+  ('Org', 'Orgeneral'),
+  ('Uzm', 'Uzman'),
+  ('Yrd', 'Yardımcı'),
+  ('Doç', 'Doçent'),# okunmuyo
+  ('Yzb', 'Yüzbaşı'),
+  ('mah', 'Mahallesi'),
+  ('cad', 'Caddesi'),
+  ('sok', 'Sokak'),
+  ('Apt', 'Apartman'),
+  ('Ecz', 'Eczane'),
+  ('THY', 'Türk Hava Yolları'),
+  ('MEB', 'Milli Eğitim Bakanlığı'),
+  ('bkz', 'bakınız'),
+  ('bul', 'Bulvarı'),
+  ('gön', 'gönderen'),# okunmuyo
+  ('lt', 'litre'),
+  ('yy', 'yüzyıl'),
 ]]
 
 
@@ -48,9 +79,11 @@ def expand_abbreviations(text):
     text = re.sub(regex, replacement, text)
   return text
 
-
 def expand_numbers(text):
   return normalize_numbers(text)
+
+def expand_numbers_tr(text):
+  return normalize_numbers_tr(text)
 
 
 def lowercase(text):
@@ -63,7 +96,6 @@ def collapse_whitespace(text):
 
 def convert_to_ascii(text):
   return unidecode(text)
-
 
 def basic_cleaners(text):
   '''Basic pipeline that lowercases and collapses whitespace without transliteration.'''
@@ -86,5 +118,14 @@ def english_cleaners(text):
   text = lowercase(text)
   text = expand_numbers(text)
   text = expand_abbreviations(text)
+  text = collapse_whitespace(text)
+  return text
+
+def turkish_cleaners(text):
+  text = expand_numbers_tr(text)
+  text = expand_abbreviations(text)
+  text = turkish_letter_changer(text)
+  text = convert_to_ascii(text)
+  text = lowercase(text)
   text = collapse_whitespace(text)
   return text
