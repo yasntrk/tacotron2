@@ -28,8 +28,8 @@ def turkish_letter_changer(text):
   text = text.replace("Ü", "q")
   text = text.replace("ş", "x")
   text = text.replace("Ş", "x")
-  text = text.replace("ç", "j")
-  text = text.replace("Ç", "j")
+  text = text.replace("ö", "j")
+  text = text.replace("Ö", "j")
   return text
 
 # List of (regular expression, replacement) pairs for abbreviations:
