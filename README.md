@@ -1,4 +1,4 @@
-# Tacotron 2 (without wavenet)
+# Tacotron 2 Turkish Symbols (without wavenet)
 
 ## Important
 In this version of tacotron2 you can use train_new_language.py to train your own language, dont forget to upgrade your own alphabet
